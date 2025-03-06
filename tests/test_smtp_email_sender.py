@@ -1,6 +1,6 @@
 import pytest
 import smtplib
-from src.smtp_email_sender import send_email
+from ..src.smtp_email_sender import send_email
 from unittest.mock import patch
 
 def test_send_email_valid_inputs():
