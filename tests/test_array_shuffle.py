@@ -27,8 +27,10 @@ def test_shuffle_different_types():
     mixed_list = [1, 'a', True, 3.14, None]
     shuffled = shuffle_array(mixed_list)
     
-    # Check that the shuffled list contains the same elements
-    assert sorted(shuffled) == sorted(mixed_list)
+    # Check that the shuffled list contains the same elements by counting
+    assert len(shuffled) == len(mixed_list)
+    for item in mixed_list:
+        assert shuffled.count(item) == mixed_list.count(item)
     
     # Check that the list is not in the original order
     assert shuffled != mixed_list
