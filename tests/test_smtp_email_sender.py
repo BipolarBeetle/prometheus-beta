@@ -1,6 +1,12 @@
 import pytest
 import smtplib
-from ..src.smtp_email_sender import send_email
+import sys
+import os
+
+# Add the project root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from src.smtp_email_sender import send_email
 from unittest.mock import patch
 
 def test_send_email_valid_inputs():
