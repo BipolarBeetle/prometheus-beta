@@ -18,7 +18,7 @@ def check_file_exists(file_path):
         raise TypeError("File path must be a string")
 
     # Normalize the path to handle different path formats
-    normalized_path = os.path.normpath(file_path)
+    normalized_path = os.path.abspath(os.path.normpath(file_path))
 
     # Check if the path exists and is a file (not a directory)
     return os.path.isfile(normalized_path)
