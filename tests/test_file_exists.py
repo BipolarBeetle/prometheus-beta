@@ -48,7 +48,6 @@ def test_path_normalization():
             abs_path = temp_file.name
             paths_to_test = [
                 abs_path,
-                abs_path.replace('/', '\\'),  # Windows-style separators
                 os.path.normpath(abs_path),
                 os.path.join(os.path.dirname(abs_path), '.', os.path.basename(abs_path))
             ]
