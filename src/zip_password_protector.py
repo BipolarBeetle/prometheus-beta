@@ -48,21 +48,30 @@ def create_password_protected_zip(input_path, output_zip_path, password):
 
         # Create the zip file
         with zipfile.ZipFile(output_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            # Add files to the archive
+            # Add files to the archive and encrypt them
             if os.path.isdir(zip_input_path):
                 for root, _, files in os.walk(zip_input_path):
                     for file in files:
                         file_path = os.path.join(root, file)
                         arcname = os.path.relpath(file_path, zip_input_path)
-                        zipf.write(file_path, arcname)
+                        
+                        # Create ZipInfo object with encryption flag
+                        zinfo = zipfile.ZipInfo(arcname)
+                        zinfo.compress_type = zipfile.ZIP_DEFLATED
+                        zinfo.flag_bits |= 0x1  # Set encryption flag
+                        
+                        # Write encrypted file
+                        with open(file_path, 'rb') as f:
+                            zipf.writestr(zinfo, f.read(), zipfile.ZIP_DEFLATED)
             else:
-                zipf.write(zip_input_path, os.path.basename(zip_input_path))
-
-        # Now, set password protection
-        with zipfile.ZipFile(output_zip_path, 'a') as zf:
-            for zinfo in zf.filelist:
+                # Create ZipInfo object with encryption flag for single file
+                zinfo = zipfile.ZipInfo(os.path.basename(zip_input_path))
+                zinfo.compress_type = zipfile.ZIP_DEFLATED
                 zinfo.flag_bits |= 0x1  # Set encryption flag
-                zf.writestr(zinfo, zf.read(zinfo.filename), zipfile.ZIP_DEFLATED)
+                
+                # Write encrypted file
+                with open(zip_input_path, 'rb') as f:
+                    zipf.writestr(zinfo, f.read(), zipfile.ZIP_DEFLATED)
 
         return output_zip_path
 
