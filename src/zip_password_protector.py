@@ -27,7 +27,7 @@ def create_password_protected_zip(input_path, output_zip_path, password):
         raise ValueError("Password must be at least 4 characters long")
 
     # Ensure output directory exists
-    os.makedirs(os.path.dirname(output_zip_path), exist_ok=True)
+    os.makedirs(os.path.dirname(output_zip_path) or '.', exist_ok=True)
 
     # Create ZIP file with password protection
     with zipfile.ZipFile(output_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -37,14 +37,17 @@ def create_password_protected_zip(input_path, output_zip_path, password):
                 for file in files:
                     file_path = os.path.join(root, file)
                     arcname = os.path.relpath(file_path, input_path)
-                    zipf.writestr(arcname, zipfile.ZipFile(file_path, 'r').read(), 
-                                  zipfile.ZIP_DEFLATED)
-                    zipf.setpassword(password.encode())
+                    with open(file_path, 'rb') as f:
+                        # Write file content directly
+                        zipf.writestr(arcname, f.read(), zipfile.ZIP_DEFLATED)
         # If input is a file, add it directly
         else:
             with open(input_path, 'rb') as f:
                 zipf.writestr(os.path.basename(input_path), f.read(), 
                               zipfile.ZIP_DEFLATED)
-                zipf.setpassword(password.encode())
+
+    # Encrypt the entire archive with a password
+    with zipfile.ZipFile(output_zip_path, 'w') as zf:
+        zf.setpassword(password.encode())
 
     return output_zip_path
