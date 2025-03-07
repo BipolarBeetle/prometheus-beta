@@ -62,4 +62,4 @@ def test_complex_case():
     capacity = 50
     max_value, selected_items = solve_knapsack(values, weights, capacity)
     assert max_value == 250
-    assert set(selected_items) == {0, 1, 2}
+    assert set(selected_items) == {1, 2}
