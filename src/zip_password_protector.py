@@ -47,7 +47,11 @@ def create_password_protected_zip(input_path, output_zip_path, password):
                               zipfile.ZIP_DEFLATED)
 
     # Encrypt the entire archive with a password
-    with zipfile.ZipFile(output_zip_path, 'w') as zf:
+    with zipfile.ZipFile(output_zip_path, 'a') as zf:
+        # Set zip file to use encryption
         zf.setpassword(password.encode())
+        # Encrypt the entire archive
+        for zinfo in zf.filelist:
+            zf.writestr(zinfo, zf.read(zinfo.filename), zipfile.ZIP_DEFLATED)
 
     return output_zip_path
