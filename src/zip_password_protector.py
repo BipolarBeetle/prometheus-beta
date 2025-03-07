@@ -1,5 +1,7 @@
 import os
 import zipfile
+import tempfile
+import shutil
 
 def create_password_protected_zip(input_path, output_zip_path, password):
     """
@@ -29,29 +31,41 @@ def create_password_protected_zip(input_path, output_zip_path, password):
     # Ensure output directory exists
     os.makedirs(os.path.dirname(output_zip_path) or '.', exist_ok=True)
 
-    # Create ZIP file with password protection
-    with zipfile.ZipFile(output_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        # If input is a directory, walk through and add all files
+    # Create a temporary directory to work in
+    temp_dir = tempfile.mkdtemp()
+    try:
+        # If input is a directory, copy all files 
         if os.path.isdir(input_path):
-            for root, _, files in os.walk(input_path):
-                for file in files:
-                    file_path = os.path.join(root, file)
-                    arcname = os.path.relpath(file_path, input_path)
-                    with open(file_path, 'rb') as f:
-                        # Write file content directly
-                        zipf.writestr(arcname, f.read(), zipfile.ZIP_DEFLATED)
-        # If input is a file, add it directly
+            # Create a temporary subdirectory 
+            temp_input_dir = os.path.join(temp_dir, 'input')
+            shutil.copytree(input_path, temp_input_dir)
+            zip_input_path = temp_input_dir
         else:
-            with open(input_path, 'rb') as f:
-                zipf.writestr(os.path.basename(input_path), f.read(), 
-                              zipfile.ZIP_DEFLATED)
+            # For single file, copy to temp directory
+            temp_input_file = os.path.join(temp_dir, os.path.basename(input_path))
+            shutil.copy2(input_path, temp_input_file)
+            zip_input_path = temp_input_file
 
-    # Encrypt the entire archive with a password
-    with zipfile.ZipFile(output_zip_path, 'a') as zf:
-        # Set zip file to use encryption
-        zf.setpassword(password.encode())
-        # Encrypt the entire archive
-        for zinfo in zf.filelist:
-            zf.writestr(zinfo, zf.read(zinfo.filename), zipfile.ZIP_DEFLATED)
+        # Create the zip file
+        with zipfile.ZipFile(output_zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            # Add files to the archive
+            if os.path.isdir(zip_input_path):
+                for root, _, files in os.walk(zip_input_path):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        arcname = os.path.relpath(file_path, zip_input_path)
+                        zipf.write(file_path, arcname)
+            else:
+                zipf.write(zip_input_path, os.path.basename(zip_input_path))
 
-    return output_zip_path
+        # Now, set password protection
+        with zipfile.ZipFile(output_zip_path, 'a') as zf:
+            for zinfo in zf.filelist:
+                zinfo.flag_bits |= 0x1  # Set encryption flag
+                zf.writestr(zinfo, zf.read(zinfo.filename), zipfile.ZIP_DEFLATED)
+
+        return output_zip_path
+
+    finally:
+        # Clean up temporary directory
+        shutil.rmtree(temp_dir, ignore_errors=True)
