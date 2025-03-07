@@ -40,4 +40,4 @@ def test_font_logger_empty_message(capsys):
     result = FontLogger.log("")
     captured = capsys.readouterr()
     assert result == "[NORMAL] "
-    assert captured.out.strip() == "[NORMAL] "
+    assert captured.out.strip() == "[NORMAL]"
