@@ -40,15 +40,20 @@ def has_consecutive_arithmetic_progression(arr):
     
     # Check consecutive triplets
     for i in range(len(arr) - 2):
-        # Check arithmetic progression 
         x, y, z = arr[i], arr[i+1], arr[i+2]
         
-        # Different cases of arithmetic progressions
-        increasing_prog = x < y < z and y - x == z - y
-        decreasing_prog = x > y > z and x - y == y - z
+        # Check increasing arithmetic progression
+        if x < y < z:
+            diff1 = y - x
+            diff2 = z - y
+            if diff1 == diff2 and diff1 != 0:
+                return True
         
-        # Return True if a valid arithmetic progression is found
-        if increasing_prog or decreasing_prog:
-            return True
+        # Check decreasing arithmetic progression
+        if x > y > z:
+            diff1 = x - y
+            diff2 = y - z
+            if diff1 == diff2 and diff1 != 0:
+                return True
     
     return False
