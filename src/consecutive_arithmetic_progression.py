@@ -1,17 +1,17 @@
 def has_consecutive_arithmetic_progression(arr):
     """
-    Determines if any three consecutive numbers in the array form an arithmetic progression.
+    Determines if exactly three consecutive numbers in the array form an arithmetic progression.
     
-    An arithmetic progression is a sequence of numbers where:
-    1. The difference between consecutive terms is constant
-    2. The numbers are strictly monotonic (increasing or decreasing)
-    3. The progression uses consecutive array elements
+    An arithmetic progression requires:
+    1. Constant difference between exactly three consecutive terms
+    2. Strictly monotonic (increasing or decreasing)
+    3. No other arithmetic progressions can be formed
     
     Args:
         arr (list): A list of positive integers
     
     Returns:
-        bool: True if any three consecutive numbers form an arithmetic progression, 
+        bool: True if exactly three consecutive numbers form an arithmetic progression, 
               False otherwise
     
     Raises:
@@ -21,9 +21,9 @@ def has_consecutive_arithmetic_progression(arr):
     Examples:
         >>> has_consecutive_arithmetic_progression([1, 2, 3, 4, 5])  # True (2,3,4 or 3,4,5)
         True
-        >>> has_consecutive_arithmetic_progression([1, 3, 5, 7, 9])  # True (1,3,5 or 3,5,7 or 5,7,9)
-        True
-        >>> has_consecutive_arithmetic_progression([1, 2, 4, 8, 16])  # False
+        >>> has_consecutive_arithmetic_progression([1, 3, 5, 7, 9])  # False, not consecutive
+        False
+        >>> has_consecutive_arithmetic_progression([1, 2, 4, 8, 16])  # False, unequal differences
         False
     """
     # Check input type
@@ -38,29 +38,20 @@ def has_consecutive_arithmetic_progression(arr):
     if not all(isinstance(x, int) and x > 0 for x in arr):
         raise ValueError("All elements must be positive integers")
     
-    # Check consecutive triplets
+    # Check if EXACTLY 3 consecutive elements form a progression
+    found_progression = False
     for i in range(len(arr) - 2):
-        # Take consecutive elements
         x, y, z = arr[i], arr[i+1], arr[i+2]
         
-        # Check if they form an increasing arithmetic progression
-        if x < y < z:
-            # Strictly increasing and constant difference
-            first_diff = y - x
-            second_diff = z - y
-            
-            # Exact increase and sequential elements
-            if first_diff == second_diff and first_diff > 0:
-                return True
+        # Check increasing and decreasing cases separately
+        increasing_prog = (x < y < z) and (y - x == z - y)
+        decreasing_prog = (x > y > z) and (x - y == y - z)
         
-        # Check if they form a decreasing arithmetic progression
-        if x > y > z:
-            # Strictly decreasing and constant difference
-            first_diff = x - y
-            second_diff = y - z
-            
-            # Exact decrease and sequential elements
-            if first_diff == second_diff and first_diff > 0:
-                return True
+        if increasing_prog or decreasing_prog:
+            # Ensure only one progression is found
+            if found_progression:
+                return False
+            found_progression = True
     
-    return False
+    # Return whether EXACTLY one progression was found
+    return found_progression
