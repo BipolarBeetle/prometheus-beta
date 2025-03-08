@@ -38,17 +38,19 @@ def has_consecutive_arithmetic_progression(arr):
     
     # Check consecutive triplets
     for i in range(len(arr) - 2):
-        # Check if the three consecutive numbers form a true arithmetic progression
+        # Compute differences
         diffs = [
             arr[i+1] - arr[i],  # first difference
             arr[i+2] - arr[i+1]  # second difference
         ]
         
-        # Require exact match of differences and non-zero
+        # Require exact match of differences and non-zero 
+        # AND verify strict monotonicity 
         if diffs[0] == diffs[1] and diffs[0] != 0:
-            # Also verify monotonicity (either strictly increasing or decreasing)
-            if not ((arr[i] < arr[i+1] < arr[i+2]) or (arr[i] > arr[i+1] > arr[i+2])):
-                continue
-            return True
+            # Ensure the numbers are strictly in ascending or descending order
+            if diffs[0] > 0 and arr[i] < arr[i+1] < arr[i+2]:
+                return True
+            if diffs[0] < 0 and arr[i] > arr[i+1] > arr[i+2]:
+                return True
     
     return False
