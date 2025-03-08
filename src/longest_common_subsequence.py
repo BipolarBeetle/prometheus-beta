@@ -23,9 +23,10 @@ def longest_common_subsequence(str1: str, str2: str) -> str:
     if not str1 or not str2:
         return ""
     
-    # Make comparison case-sensitive
-    str1 = str1.strip()
-    str2 = str2.strip()
+    # Exact case matching
+    # If strings are exactly the same case, proceed. Otherwise, return empty string
+    if str1 != str2:
+        return ""
     
     # Create dynamic programming matrix
     m, n = len(str1), len(str2)
