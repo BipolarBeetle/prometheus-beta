@@ -38,8 +38,12 @@ def has_consecutive_arithmetic_progression(arr):
     
     # Check consecutive triplets
     for i in range(len(arr) - 2):
-        # Check if the three consecutive numbers form an arithmetic progression
-        if (arr[i+1] - arr[i]) == (arr[i+2] - arr[i+1]):
+        # Check if the three consecutive numbers form a strictly increasing or decreasing arithmetic progression
+        diff1 = arr[i+1] - arr[i]
+        diff2 = arr[i+2] - arr[i+1]
+        
+        # Require exact match of differences to prevent false positives
+        if diff1 == diff2 and diff1 != 0:
             return True
     
     return False
