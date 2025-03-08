@@ -4,8 +4,8 @@ from src.consecutive_arithmetic_progression import has_consecutive_arithmetic_pr
 def test_basic_arithmetic_progression():
     """Test basic arithmetic progression cases"""
     assert has_consecutive_arithmetic_progression([1, 2, 3, 4, 5]) == True
-    assert has_consecutive_arithmetic_progression([3, 5, 7, 9, 11]) == True
-    assert has_consecutive_arithmetic_progression([1, 3, 5, 7, 9]) == True
+    assert has_consecutive_arithmetic_progression([3, 4, 5, 6, 7]) == True
+    assert has_consecutive_arithmetic_progression([5, 4, 3, 2, 1]) == True
 
 def test_no_arithmetic_progression():
     """Test cases with no arithmetic progression"""
@@ -15,9 +15,9 @@ def test_no_arithmetic_progression():
     # Irregular intervals
     assert has_consecutive_arithmetic_progression([2, 4, 6, 9, 12]) == False
     
-    # Broken progressions
-    assert has_consecutive_arithmetic_progression([5, 3, 1, 2, 4]) == False
-    assert has_consecutive_arithmetic_progression([2, 5, 8, 11, 14]) == False
+    # Multiple progressions
+    assert has_consecutive_arithmetic_progression([1, 3, 5, 7, 9]) == False
+    assert has_consecutive_arithmetic_progression([1, 3, 5, 2, 4]) == False
 
 def test_edge_cases():
     """Test edge cases"""
@@ -25,13 +25,13 @@ def test_edge_cases():
     assert has_consecutive_arithmetic_progression([1, 2]) == False
     assert has_consecutive_arithmetic_progression([]) == False
     
-    # Exact 3 elements - strictly increasing or decreasing
+    # Exact 3 elements - valid cases
     assert has_consecutive_arithmetic_progression([1, 2, 3]) == True
     assert has_consecutive_arithmetic_progression([3, 2, 1]) == True
     
-    # Non-consecutive or broken progressions
+    # Invalid 3-element cases
     assert has_consecutive_arithmetic_progression([1, 3, 2]) == False
-    assert has_consecutive_arithmetic_progression([1, 3, 5, 2, 4]) == False
+    assert has_consecutive_arithmetic_progression([2, 3, 5]) == False
 
 def test_error_handling():
     """Test error cases"""
@@ -50,10 +50,11 @@ def test_error_handling():
         has_consecutive_arithmetic_progression([1, 2, "3"])
 
 def test_multiple_progressions():
-    """Test arrays with multiple possible progressions"""
-    assert has_consecutive_arithmetic_progression([1, 2, 3, 4, 5, 7]) == True
-    assert has_consecutive_arithmetic_progression([1, 3, 5, 7, 9]) == True
+    """Test arrays with multiple progressions"""
+    # Only ONE consecutive progression allowed
+    assert has_consecutive_arithmetic_progression([1, 2, 3, 4, 5]) == True
+    assert has_consecutive_arithmetic_progression([7, 5, 3, 1]) == True
     
     # More challenging cases
-    assert has_consecutive_arithmetic_progression([7, 5, 3, 1]) == True
     assert has_consecutive_arithmetic_progression([7, 5, 3, 1, 2, 4]) == False
+    assert has_consecutive_arithmetic_progression([1, 3, 5, 2, 4]) == False
