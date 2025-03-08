@@ -42,18 +42,11 @@ def has_consecutive_arithmetic_progression(arr):
     for i in range(len(arr) - 2):
         x, y, z = arr[i], arr[i+1], arr[i+2]
         
-        # Check increasing arithmetic progression
-        if x < y < z:
-            diff1 = y - x
-            diff2 = z - y
-            if diff1 == diff2 and diff1 != 0:
-                return True
+        # Check increasing and decreasing arithmetic progressions
+        increasing_prog = (x < y < z) and (y - x == z - y)
+        decreasing_prog = (x > y > z) and (x - y == y - z)
         
-        # Check decreasing arithmetic progression
-        if x > y > z:
-            diff1 = x - y
-            diff2 = y - z
-            if diff1 == diff2 and diff1 != 0:
-                return True
+        if increasing_prog or decreasing_prog:
+            return True
     
     return False
