@@ -34,10 +34,10 @@ def test_type_errors():
 
 def test_case_sensitivity():
     """Test case sensitivity"""
-    assert longest_common_subsequence("AbC", "aBc") == ""  # Different case, no match
-    assert longest_common_subsequence("Hello", "hello") == ""  # Different case, no match
+    assert longest_common_subsequence("AbC", "aBc") == ""
+    assert longest_common_subsequence("Hello", "hello") == ""
 
 def test_repeated_characters():
     """Test LCS with repeated characters"""
     assert longest_common_subsequence("AAAAAA", "AAAA") == "AAAA"
-    assert longest_common_subsequence("ABCBDAB", "BDCABA") == "BDAB"  # Corrected expected output
+    assert longest_common_subsequence("ABCBDAB", "BDCABA") == "BDAB"
