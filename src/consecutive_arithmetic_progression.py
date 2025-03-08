@@ -19,7 +19,7 @@ def has_consecutive_arithmetic_progression(arr):
         ValueError: If the input contains non-positive integers
     
     Examples:
-        >>> has_consecutive_arithmetic_progression([1, 2, 3, 4, 5])  # True (2,3,4 or 3,4,5)
+        >>> has_consecutive_arithmetic_progression([3, 4, 5, 6, 7])  # True
         True
         >>> has_consecutive_arithmetic_progression([1, 3, 5, 7, 9])  # False, not consecutive
         False
@@ -38,20 +38,18 @@ def has_consecutive_arithmetic_progression(arr):
     if not all(isinstance(x, int) and x > 0 for x in arr):
         raise ValueError("All elements must be positive integers")
     
-    # Check if EXACTLY 3 consecutive elements form a progression
-    found_progression = False
+    # Count total progressions
+    progression_count = 0
     for i in range(len(arr) - 2):
         x, y, z = arr[i], arr[i+1], arr[i+2]
         
-        # Check increasing and decreasing cases separately
-        increasing_prog = (x < y < z) and (y - x == z - y)
-        decreasing_prog = (x > y > z) and (x - y == y - z)
+        # Two checks: increasing and decreasing
+        is_increasing_prog = (x < y < z) and (y - x == z - y)
+        is_decreasing_prog = (x > y > z) and (x - y == y - z)
         
-        if increasing_prog or decreasing_prog:
-            # Ensure only one progression is found
-            if found_progression:
-                return False
-            found_progression = True
+        # Count valid progressions
+        if is_increasing_prog or is_decreasing_prog:
+            progression_count += 1
     
-    # Return whether EXACTLY one progression was found
-    return found_progression
+    # Must be exactly one progression
+    return progression_count == 1
