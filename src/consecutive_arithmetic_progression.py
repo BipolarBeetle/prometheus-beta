@@ -38,18 +38,22 @@ def has_consecutive_arithmetic_progression(arr):
     if not all(isinstance(x, int) and x > 0 for x in arr):
         raise ValueError("All elements must be positive integers")
     
-    # Count total progressions
+    # Strict check for a single, consecutive arithmetic progression
     progression_count = 0
+    last_progression_end = -1
+    
     for i in range(len(arr) - 2):
         x, y, z = arr[i], arr[i+1], arr[i+2]
         
-        # Two checks: increasing and decreasing
-        is_increasing_prog = (x < y < z) and (y - x == z - y)
-        is_decreasing_prog = (x > y > z) and (x - y == y - z)
+        # Check increasing progression
+        is_increasing = (x < y < z) and (y - x == z - y)
+        # Check decreasing progression
+        is_decreasing = (x > y > z) and (x - y == y - z)
         
-        # Count valid progressions
-        if is_increasing_prog or is_decreasing_prog:
+        # Ensure no overlapping progressions
+        if (is_increasing or is_decreasing) and i >= last_progression_end:
             progression_count += 1
+            last_progression_end = i + 2
     
-    # Must be exactly one progression
+    # Must be exactly one progression with no other potential progressions
     return progression_count == 1
