@@ -3,17 +3,17 @@ from src.vowel_replacer import replace_vowels
 
 def test_replace_vowels_lowercase():
     assert replace_vowels("hello") == "hillu"
-    assert replace_vowels("python") == "pythin"
+    assert replace_vowels("python") == "pythun"
     assert replace_vowels("world") == "wurld"
 
 def test_replace_vowels_uppercase():
     assert replace_vowels("HELLO") == "HILLU"
-    assert replace_vowels("PYTHON") == "PYTHIN"
+    assert replace_vowels("PYTHON") == "PYTHUN"
     assert replace_vowels("WORLD") == "WURLD"
 
 def test_replace_vowels_mixed_case():
     assert replace_vowels("HeLLo") == "HiLLu"
-    assert replace_vowels("PyThOn") == "PyThin"
+    assert replace_vowels("PyThOn") == "PyThUn"
 
 def test_replace_vowels_all_vowels():
     assert replace_vowels("aeiou") == "eioua"
