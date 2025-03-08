@@ -1,0 +1,30 @@
+import pytest
+from src.vowel_replacer import replace_vowels
+
+def test_replace_vowels_lowercase():
+    assert replace_vowels("hello") == "holle"
+    assert replace_vowels("python") == "pythen"
+    assert replace_vowels("world") == "werld"
+
+def test_replace_vowels_uppercase():
+    assert replace_vowels("HELLO") == "HOLLE"
+    assert replace_vowels("PYTHON") == "PYTHEN"
+    assert replace_vowels("WORLD") == "WERLD"
+
+def test_replace_vowels_mixed_case():
+    assert replace_vowels("HeLLo") == "HoLLe"
+    assert replace_vowels("PyThOn") == "PyThen"
+
+def test_replace_vowels_all_vowels():
+    assert replace_vowels("aeiou") == "eioua"
+    assert replace_vowels("AEIOU") == "EIOUA"
+
+def test_replace_vowels_no_vowels():
+    assert replace_vowels("rhythm") == "rhythm"
+    assert replace_vowels("123") == "123"
+
+def test_replace_vowels_edge_cases():
+    assert replace_vowels("") == ""
+    assert replace_vowels(" ") == " "
+    assert replace_vowels("a") == "e"
+    assert replace_vowels("U") == "A"
