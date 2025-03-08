@@ -3,7 +3,7 @@ def has_consecutive_arithmetic_progression(arr):
     Determines if any three consecutive numbers in the array form an arithmetic progression.
     
     An arithmetic progression is a sequence of numbers where the difference 
-    between consecutive terms is constant.
+    between consecutive terms is constant and values are strictly monotonic.
     
     Args:
         arr (list): A list of positive integers
@@ -38,19 +38,16 @@ def has_consecutive_arithmetic_progression(arr):
     
     # Check consecutive triplets
     for i in range(len(arr) - 2):
-        # Compute differences
-        diffs = [
-            arr[i+1] - arr[i],  # first difference
-            arr[i+2] - arr[i+1]  # second difference
-        ]
+        # Check if the differences show a consistent arithmetic progression
+        first_diff = arr[i+1] - arr[i]
+        second_diff = arr[i+2] - arr[i+1]
         
-        # Require exact match of differences and non-zero 
-        # AND verify strict monotonicity 
-        if diffs[0] == diffs[1] and diffs[0] != 0:
-            # Ensure the numbers are strictly in ascending or descending order
-            if diffs[0] > 0 and arr[i] < arr[i+1] < arr[i+2]:
+        # Require exact match of differences, non-zero, and strict monotonicity
+        if first_diff == second_diff and first_diff != 0:
+            # Additional checks to ensure true arithmetic progression
+            if first_diff > 0 and arr[i] < arr[i+1] < arr[i+2]:
                 return True
-            if diffs[0] < 0 and arr[i] > arr[i+1] > arr[i+2]:
+            if first_diff < 0 and arr[i] > arr[i+1] > arr[i+2]:
                 return True
     
     return False
