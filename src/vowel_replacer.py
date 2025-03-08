@@ -11,11 +11,11 @@ def replace_vowels(input_string):
 
     Examples:
         >>> replace_vowels("hello")
-        "holle"
+        "hillu"
         >>> replace_vowels("AEIOU")
         "EIOUA"
         >>> replace_vowels("Python")
-        "Pythen"
+        "Pythin"
     """
     # Specific vowel mappings for lowercase and uppercase
     vowel_map_lower = {'a': 'e', 'e': 'i', 'i': 'o', 'o': 'u', 'u': 'a'}
