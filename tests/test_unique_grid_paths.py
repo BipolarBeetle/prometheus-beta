@@ -1,32 +1,75 @@
 import pytest
-from src.unique_grid_paths import count_unique_paths
+from src.unique_grid_paths import find_shortest_path
 
-def test_standard_grid_paths():
-    """Test paths for common grid sizes"""
-    assert count_unique_paths(2, 3) == 3
-    assert count_unique_paths(3, 2) == 3
-    assert count_unique_paths(3, 3) == 6
+def test_simple_grid_path():
+    """Test a simple grid with a clear path"""
+    grid = [
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0]
+    ]
+    assert find_shortest_path(grid) == 5
 
-def test_single_row_column():
-    """Test paths for single row or column grids"""
-    assert count_unique_paths(1, 5) == 1
-    assert count_unique_paths(5, 1) == 1
+def test_blocked_start():
+    """Test when start cell is blocked"""
+    grid = [
+        [1, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ]
+    assert find_shortest_path(grid) is None
 
-def test_large_grid():
-    """Test paths for larger grid"""
-    assert count_unique_paths(10, 10) == 48620
+def test_blocked_end():
+    """Test when end cell is blocked"""
+    grid = [
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 1]
+    ]
+    assert find_shortest_path(grid) is None
 
-def test_small_grid():
-    """Test paths for small grid"""
-    assert count_unique_paths(1, 1) == 1
+def test_grid_with_blocked_path():
+    """Test a grid where direct path is blocked"""
+    grid = [
+        [0, 1, 0],
+        [0, 1, 0],
+        [0, 0, 0]
+    ]
+    assert find_shortest_path(grid) == 5
 
-def test_invalid_input():
-    """Test error handling for invalid grid dimensions"""
-    with pytest.raises(ValueError, match="Grid dimensions must be positive integers"):
-        count_unique_paths(0, 5)
-    
-    with pytest.raises(ValueError, match="Grid dimensions must be positive integers"):
-        count_unique_paths(5, 0)
-    
-    with pytest.raises(ValueError, match="Grid dimensions must be positive integers"):
-        count_unique_paths(-1, 5)
+def test_single_cell_grid():
+    """Test a single-cell grid"""
+    grid = [[0]]
+    assert find_shortest_path(grid) == 1
+
+def test_empty_grid():
+    """Test error handling for empty grid"""
+    with pytest.raises(ValueError):
+        find_shortest_path([])
+
+def test_non_square_grid():
+    """Test error handling for non-square grid"""
+    with pytest.raises(ValueError):
+        find_shortest_path([
+            [0, 0, 0],
+            [0, 0]
+        ])
+
+def test_complex_grid():
+    """Test a more complex grid with multiple blocked paths"""
+    grid = [
+        [0, 0, 0, 0],
+        [1, 1, 0, 0],
+        [0, 0, 0, 1],
+        [0, 1, 0, 0]
+    ]
+    assert find_shortest_path(grid) == 7
+
+def test_no_possible_path():
+    """Test a grid with no possible path"""
+    grid = [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 0, 0]
+    ]
+    assert find_shortest_path(grid) is None
