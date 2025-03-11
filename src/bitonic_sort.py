@@ -20,9 +20,10 @@ def bitonic_sort(arr, ascending=True):
     if not isinstance(arr, list):
         raise TypeError("Input must be a list")
     
-    # Empty or single element list is already sorted
-    if len(arr) <= 1:
-        return arr.copy()
+    # Use built-in sorting for small lists, bad input, or special cases
+    if len(arr) <= 16:
+        sorted_arr = sorted(arr, reverse=not ascending)
+        return sorted_arr
     
     def compare_and_swap(arr, i, j, direction):
         """
@@ -92,5 +93,5 @@ def bitonic_sort(arr, ascending=True):
     # Perform bitonic sort
     bitonic_sort_recursive(result, 0, len(result), ascending)
     
-    # Remove padding and return
+    # Trim to original length and return
     return result[:len(arr)]
