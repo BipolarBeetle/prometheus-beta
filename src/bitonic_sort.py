@@ -80,7 +80,17 @@ def bitonic_sort(arr, ascending=True):
     # Create a copy to avoid modifying the original list
     result = arr.copy()
     
+    # Find the next power of 2 larger than the list length
+    n = 1
+    while n < len(result):
+        n *= 2
+    
+    # Pad the list with last element to make its length a power of 2
+    while len(result) < n:
+        result.append(result[-1])
+    
     # Perform bitonic sort
     bitonic_sort_recursive(result, 0, len(result), ascending)
     
-    return result
+    # Remove padding and return
+    return result[:len(arr)]
