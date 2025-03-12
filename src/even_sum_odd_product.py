@@ -25,10 +25,19 @@ def calculate_even_sum_odd_product(numbers):
     # Calculate sum of even numbers
     even_sum = sum(num for num in numbers if num % 2 == 0)
     
-    # Calculate product of odd numbers
+    # Calculate product of odd numbers with absolute values
     odd_product = 1
+    num_odd = 0
+    # First count odd numbers and track their sign
+    num_negative_odds = sum(1 for num in numbers if num % 2 != 0 and num < 0)
+    
     for num in numbers:
         if num % 2 != 0:
-            odd_product *= num
+            odd_product *= abs(num)
+            num_odd += 1
+    
+    # Adjust the sign based on the number of negative odd numbers
+    if num_odd > 0 and num_negative_odds % 2 == 1:
+        odd_product = -odd_product
     
     return even_sum, odd_product
