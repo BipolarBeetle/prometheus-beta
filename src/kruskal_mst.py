@@ -80,10 +80,24 @@ def kruskal_mst(graph):
     # List to store MST edges
     mst = []
 
+    # Track unique components to handle disconnected graphs
+    components = set()
+
     # Iterate through sorted edges
     for weight, u, v in sorted_edges:
-        # If including this edge doesn't form a cycle, add it to MST
-        if ds.union(u, v):
+        # Check if including this edge would create a cycle
+        root_u = ds.find(u)
+        root_v = ds.find(v)
+        
+        if root_u != root_v:
+            ds.union(u, v)
             mst.append((weight, u, v))
+            
+            # Track unique root components
+            components.update([root_u, root_v])
+            
+            # If we have a valid MST (vertices - 1 edges), stop
+            if len(mst) == len(components) - 1:
+                break
 
     return mst
