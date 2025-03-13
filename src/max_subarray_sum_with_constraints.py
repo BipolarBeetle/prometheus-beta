@@ -37,11 +37,15 @@ def max_subarray_sum_with_constraints(A, k, s):
         # Add current element to the window
         current_sum += A[end]
         
-        # Ensure we have at least k elements
-        while end - start + 1 > k and start < end:
+        # Remove elements from the start to ensure at least k elements
+        while end - start + 1 > k:
             # If window size exceeds k, remove first element
             current_sum -= A[start]
             start += 1
+        
+        # Adjust start to ensure minimum k elements
+        while end - start + 1 < k:
+            continue
         
         # Check if current window meets constraints
         if (end - start + 1 >= k) and (current_sum >= s):
