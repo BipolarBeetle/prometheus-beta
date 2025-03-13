@@ -25,13 +25,10 @@ def reverse_word_chars(sentence: str) -> str:
     if not sentence:
         return ""
     
-    # Use regex to split words while preserving punctuation and spacing
-    def reverse_word(match):
-        word = match.group(0)
-        # Check if the word contains only non-word characters (punctuation)
-        if not re.search(r'\w', word):
-            return word
-        return word[::-1]
+    # Split the sentence into tokens (words and punctuation)
+    tokens = re.findall(r'\w+|[^\w\s]|\s+', sentence)
     
-    # Use regex to find words and non-word characters, reverse words
-    return re.sub(r'\S+', reverse_word, sentence)
+    # Reverse only the words, keeping punctuation and spaces intact
+    reversed_tokens = [token[::-1] if token.isalnum() else token for token in tokens]
+    
+    return ''.join(reversed_tokens)
