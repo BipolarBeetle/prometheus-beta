@@ -23,7 +23,7 @@ def test_negative_numbers_and_weights():
     """Test weighted sum with negative numbers and weights."""
     numbers = [-1, 2, -3]
     weights = [1, -2, 0.5]
-    assert compute_weighted_sum(numbers, weights) == pytest.approx(-0.5)
+    assert compute_weighted_sum(numbers, weights) == pytest.approx(-6.5)
 
 def test_different_length_lists_raises_error():
     """Test that different length lists raise a ValueError."""
